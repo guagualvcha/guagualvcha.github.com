@@ -166,9 +166,9 @@
 
 <p><strong>BeanFactory 对象注册和绑定的方式</strong></p>
 
-<ol>
+<ul>
 <li>直接编码</li>
-</ol>
+</ul>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> 
 <span class="o">{</span> 
  <span class="n">DefaultListableBeanFactory</span> <span class="n">beanRegistry</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">DefaultListableBeanFactory</span><span class="o">();</span> 
@@ -209,10 +209,10 @@
 <p>编码过程如下：
 DefaultListableBeanFactory 既实现了BeanFactory接口，也实现了BeanDefinitionRegistry接口，因策首先生成一个默认的register，生成bean对象，将bean对象注册到register，即生成ID和类的映射，生成依赖对象：ConstructorArgumentValues，MutablePropertyValues ，把依赖对象注入到bean对象中，再把register作为一个BeanFctory返回，得到一个IOC Service provider。</p>
 
-<ol>
+<ul>
 <li>外部配置文件方式
 支持property 和xml 配置文件。这里仅展示xml的配置,文档约束从DTD转向XSD，这里采样XSD。</li>
-</ol>
+</ul>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
     <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="na">xmlns:util=</span><span class="s">&quot;http://www.springframework.org/schema/util&quot;</span>
     <span class="na">xmlns:jee=</span><span class="s">&quot;http://www.springframework.org/schema/jee&quot;</span> <span class="na">xmlns:lang=</span><span class="s">&quot;http://www.springframework.org/schema/lang&quot;</span>
@@ -239,12 +239,13 @@ DefaultListableBeanFactory 既实现了BeanFactory接口，也实现了BeanDefin
 
 <span class="nt">&lt;/beans&gt;</span> 
 </code></pre></div>
-<p>生成方法：
-<code>java
-   BeanFactory container=new XmlBeanFactory(new ClassPathResource(&quot;../news-config.xml&quot;)); 
-</code>
-3. 注解方式
-稍后详细介绍</p>
+<p>生成方法：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">   <span class="n">BeanFactory</span> <span class="n">container</span><span class="o">=</span><span class="k">new</span> <span class="nf">XmlBeanFactory</span><span class="o">(</span><span class="k">new</span> <span class="nf">ClassPathResource</span><span class="o">(</span><span class="s">&quot;../news-config.xml&quot;</span><span class="o">));</span> 
+</code></pre></div>
+<ul>
+<li>注解方式
+稍后详细介绍</li>
+</ul>
 
 <hr>
 

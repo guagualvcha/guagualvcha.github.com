@@ -5,8 +5,8 @@
         <description>Uncle Bai's Blog - uncle bai</description>
         <link>http://username.github.io</link>
         <link>http://username.github.io</link>
-        <lastBuildDate>2014-09-16T10:07:53+08:00</lastBuildDate>
-        <pubDate>2014-09-16T10:07:53+08:00</pubDate>
+        <lastBuildDate>2014-09-16T11:06:55+08:00</lastBuildDate>
+        <pubDate>2014-09-16T11:06:55+08:00</pubDate>
         <ttl>1800</ttl>
 
 
@@ -127,9 +127,9 @@
 
 &lt;p&gt;&lt;strong&gt;BeanFactory 对象注册和绑定的方式&lt;/strong&gt;&lt;/p&gt;
 
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;直接编码&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
 &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 
  &lt;span class=&quot;n&quot;&gt;DefaultListableBeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanRegistry&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DefaultListableBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; 
@@ -170,10 +170,10 @@
 &lt;p&gt;编码过程如下：
 DefaultListableBeanFactory 既实现了BeanFactory接口，也实现了BeanDefinitionRegistry接口，因策首先生成一个默认的register，生成bean对象，将bean对象注册到register，即生成ID和类的映射，生成依赖对象：ConstructorArgumentValues，MutablePropertyValues ，把依赖对象注入到bean对象中，再把register作为一个BeanFctory返回，得到一个IOC Service provider。&lt;/p&gt;
 
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;外部配置文件方式
 支持property 和xml 配置文件。这里仅展示xml的配置,文档约束从DTD转向XSD，这里采样XSD。&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/beans&amp;quot;&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:util=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/util&amp;quot;&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;xmlns:jee=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/jee&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/lang&amp;quot;&lt;/span&gt;
@@ -200,12 +200,13 @@ DefaultListableBeanFactory 既实现了BeanFactory接口，也实现了BeanDefin
 
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt; 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;生成方法：
-&lt;code&gt;java
-   BeanFactory container=new XmlBeanFactory(new ClassPathResource(&amp;quot;../news-config.xml&amp;quot;)); 
-&lt;/code&gt;
-3. 注解方式
-稍后详细介绍&lt;/p&gt;
+&lt;p&gt;生成方法：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;   &lt;span class=&quot;n&quot;&gt;BeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;XmlBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ClassPathResource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;../news-config.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;注解方式
+稍后详细介绍&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;hr&gt;
 
