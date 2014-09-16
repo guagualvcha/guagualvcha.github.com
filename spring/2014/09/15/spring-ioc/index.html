@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7 ie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8 ie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9 ie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>spring ioc 基础</title>
+	<meta name="author" content="uncle bai">
+	<link href='/assets/themes/the-minimum/css/style.css' rel="stylesheet" media="all">
+	<link href="http://feeds.feedburner.com/" rel="alternate" title="spring ioc 基础" type="application/atom+xml">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.0.6/modernizr.min.js"></script>
+</head>
+<body>
+
+<div id="page" class="hentry">
+	<header class="the-header">
+		<div class="unit-head">
+			<div class="unit-inner unit-head-inner">
+				<p class="logo"><a href="/welcome.html">Uncle Bai's Blog</a></p>
+				<nav class="nav-global">
+					<ul>
+						<li class="archive"><a href="/archive.html">archive</a></li>
+						<li class="page"><a href="/pages.html">pages</a></li>
+						<li class="category"><a href="/categories.html">categories</a></li>
+						<li class="tag"><a href="/tags.html">tags</a></li>
+						<li class="forkme"><iframe src="http://markdotto.github.com/github-buttons/github-btn.html?user=plusjade&repo=jekyll-bootstrap&type=fork&count=true"
+								allowtransparency="true" frameborder="0" scrolling="0" width="95px" height="20px"></iframe></li>
+					</ul>
+				</nav>
+			</div><!-- unit-inner -->
+		</div><!-- unit-head -->
+	</header>
+	<div class="body" role="main">
+		<div class="unit-body">
+			<div class="unit-inner unit-body-inner">
+				<div class="entry-content">
+					
+<article class="unit-article layout-post">
+	<div class="unit-inner unit-article-inner">
+		<div class="content">
+			<header>
+				<div class="unit-head">
+					<div class="unit-inner unit-head-inner">
+						<h1 class="h2 entry-title">spring ioc 基础</h1>
+					</div><!-- unit-inner -->
+				</div><!-- unit-head -->
+			</header>
+
+			<div class="bd">
+				<div class="entry-content">
+					<h2 id="目录">目录</h2>
+
+<div class="toc"><ul>
+<li>
+<a href="#目录">目录</a>
+</li>
+<li>
+<a href="#maven-包配置">maven 包配置</a>
+</li>
+<li>
+<a href="#ioc-释意">IOC 释意</a>
+</li>
+<li>
+<a href="#ioc-service-provider-作用">IOC service provider 作用</a>
+</li>
+<li>
+<a href="#beanfactory">BeanFactory</a>
+</li>
+<li>
+<a href="#xml配置文件详解">XML配置文件详解</a>
+</li>
+</ul>
+</div>
+
+<hr>
+
+<h2 id="maven-包配置">maven 包配置</h2>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+
+
+    <span class="nt">&lt;build&gt;</span>
+
+     <span class="c">&lt;!-- resources，把配置文件app.xml 放在该目录下，编译完成后，该文件会放在classes的目录下--&gt;</span>
+        <span class="nt">&lt;resources&gt;</span>
+            <span class="nt">&lt;resource&gt;</span>
+                <span class="nt">&lt;directory&gt;</span>src/main/conf<span class="nt">&lt;/directory&gt;</span>
+            <span class="nt">&lt;/resource&gt;</span>
+        <span class="nt">&lt;/resources&gt;</span>
+
+
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;source&gt;</span>1.7<span class="nt">&lt;/source&gt;</span>
+                    <span class="nt">&lt;target&gt;</span>1.7<span class="nt">&lt;/target&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+
+    <span class="nt">&lt;/build&gt;</span>
+
+
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="c">&lt;!-- 测试依赖 --&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>3.8.1<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="c">&lt;!--添加core和context包--&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>3.0.5.RELEASE<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>3.0.5.RELEASE<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="ioc-释意">IOC 释意</h2>
+
+<p>IOC: Invert Of Control，控制反转，也叫做依赖注入
+遵循好莱坞原则：Don&#39;t call me,I will call you !
+好处：IOC容器统一管理复杂分散的耦合关系，也称IOC service provider。
+<em>IOC方式</em>
+ - 构造方法注入，获取对象的构造函数列表，注入相应的对象，对象构造完成后马上就能使用。
+ - setter方法注入，为属性暴露setXXX方法，外界调用setXXX方法注入属性对象。
+ - 接口注入(过时)，通过实现的接口对应的特定的方法注入对象。</p>
+
+<p>比较：构造方法和setter方法注入比较常见，前者在对象构造完成后就进入就绪状态，后者可以支持很多属性分别注入。</p>
+
+<hr>
+
+<h2 id="ioc-service-provider-作用">IOC service provider 作用</h2>
+
+<ul>
+<li>业务对象的构建管理</li>
+<li>业务对象间的依赖绑定 </li>
+</ul>
+
+<p>前者让业务对象的逻辑免受构建的污染，后者让业务对象实现逻辑时，依赖的对象处于就绪状态。</p>
+
+<hr>
+
+<h2 id="beanfactory">BeanFactory</h2>
+
+<p>Spring提供了两种容器类型：BeanFactory和ApplicationContext。</p>
+
+<ul>
+<li>BeanFactory: 基础类型IoC容器,，默认采用延迟初始化策略（lazy-load）</li>
+<li>ApplicationContext。ApplicationContext在BeanFactory的基础上构建的，是相对比较高级的容器实现，默认全部初始化并绑定完成</li>
+</ul>
+
+<p><strong>BeanFactory 对象注册和绑定的方式</strong></p>
+
+<ol>
+<li>直接编码</li>
+</ol>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> 
+<span class="o">{</span> 
+ <span class="n">DefaultListableBeanFactory</span> <span class="n">beanRegistry</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">DefaultListableBeanFactory</span><span class="o">();</span> 
+ <span class="n">BeanFactory</span> <span class="n">container</span> <span class="o">=</span> <span class="o">(</span><span class="n">BeanFactory</span><span class="o">)</span><span class="n">bindViaCode</span><span class="o">(</span><span class="n">beanRegistry</span><span class="o">);</span> 
+ <span class="n">FXNewsProvider</span> <span class="n">newsProvider</span> <span class="o">=</span> <span class="err">➥</span>
+ <span class="o">(</span><span class="n">FXNewsProvider</span><span class="o">)</span><span class="n">container</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;djNewsProvider&quot;</span><span class="o">);</span> 
+ <span class="n">newsProvider</span><span class="o">.</span><span class="na">getAndPersistNews</span><span class="o">();</span> 
+<span class="o">}</span> 
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">BeanFactory</span> <span class="nf">bindViaCode</span><span class="o">(</span><span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> 
+<span class="o">{</span> 
+ <span class="c1">//声明bean对象</span>
+ <span class="n">AbstractBeanDefinition</span> <span class="n">newsProvider</span> <span class="o">=</span> <span class="err">➥</span>
+ <span class="k">new</span> <span class="nf">RootBeanDefinition</span><span class="o">(</span><span class="n">FXNewsProvider</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span> 
+ <span class="n">AbstractBeanDefinition</span> <span class="n">newsListener</span> <span class="o">=</span> <span class="err">➥</span>
+ <span class="k">new</span> <span class="nf">RootBeanDefinition</span><span class="o">(</span><span class="n">DowJonesNewsListener</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span> 
+ <span class="n">AbstractBeanDefinition</span> <span class="n">newsPersister</span> <span class="o">=</span> <span class="err">➥</span>
+ <span class="k">new</span> <span class="nf">RootBeanDefinition</span><span class="o">(</span><span class="n">DowJonesNewsPersister</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span> 
+ <span class="c1">// 将bean定义注册到容器中</span>
+ <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="s">&quot;djNewsProvider&quot;</span><span class="o">,</span> <span class="n">newsProvider</span><span class="o">);</span> 
+ <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="s">&quot;djListener&quot;</span><span class="o">,</span> <span class="n">newsListener</span><span class="o">);</span> 
+ <span class="n">registry</span><span class="o">.</span><span class="na">registerBeanDefinition</span><span class="o">(</span><span class="s">&quot;djPersister&quot;</span><span class="o">,</span> <span class="n">newsPersister</span><span class="o">);</span> 
+<span class="c1">// 指定依赖关系</span>
+ <span class="c1">// 1. 可以通过构造方法注入方式</span>
+ <span class="n">ConstructorArgumentValues</span> <span class="n">argValues</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ConstructorArgumentValues</span><span class="o">();</span> 
+ <span class="n">argValues</span><span class="o">.</span><span class="na">addIndexedArgumentValue</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">newsListener</span><span class="o">);</span> 
+ <span class="n">argValues</span><span class="o">.</span><span class="na">addIndexedArgumentValue</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">newsPersister</span><span class="o">);</span> 
+ <span class="n">newsProvider</span><span class="o">.</span><span class="na">setConstructorArgumentValues</span><span class="o">(</span><span class="n">argValues</span><span class="o">);</span> 
+ <span class="c1">// 2. 或者通过setter方法注入方式</span>
+ <span class="n">MutablePropertyValues</span> <span class="n">propertyValues</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MutablePropertyValues</span><span class="o">();</span> 
+ <span class="n">propertyValues</span><span class="o">.</span><span class="na">addPropertyValue</span><span class="o">(</span><span class="k">new</span> <span class="nf">ropertyValue</span><span class="o">(</span><span class="s">&quot;newsListener&quot;</span><span class="o">,</span><span class="n">newsListener</span><span class="o">));</span> 
+ <span class="n">propertyValues</span><span class="o">.</span><span class="na">addPropertyValue</span><span class="o">(</span><span class="k">new</span> <span class="nf">PropertyValue</span><span class="o">(</span><span class="s">&quot;newPersistener&quot;</span><span class="o">,</span><span class="n">newsPersister</span><span class="o">));</span> 
+ <span class="n">newsProvider</span><span class="o">.</span><span class="na">setPropertyValues</span><span class="o">(</span><span class="n">propertyValues</span><span class="o">);</span> 
+ <span class="c1">// 绑定完成</span>
+ <span class="k">return</span> <span class="o">(</span><span class="n">BeanFactory</span><span class="o">)</span><span class="n">registry</span><span class="o">;</span> 
+<span class="o">}</span> 
+</code></pre></div>
+<p>编码过程如下：
+DefaultListableBeanFactory 既实现了BeanFactory接口，也实现了BeanDefinitionRegistry接口，因策首先生成一个默认的register，生成bean对象，将bean对象注册到register，即生成ID和类的映射，生成依赖对象：ConstructorArgumentValues，MutablePropertyValues ，把依赖对象注入到bean对象中，再把register作为一个BeanFctory返回，得到一个IOC Service provider。</p>
+
+<ol>
+<li>外部配置文件方式
+支持property 和xml 配置文件。这里仅展示xml的配置,文档约束从DTD转向XSD，这里采样XSD。</li>
+</ol>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+    <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="na">xmlns:util=</span><span class="s">&quot;http://www.springframework.org/schema/util&quot;</span>
+    <span class="na">xmlns:jee=</span><span class="s">&quot;http://www.springframework.org/schema/jee&quot;</span> <span class="na">xmlns:lang=</span><span class="s">&quot;http://www.springframework.org/schema/lang&quot;</span>
+    <span class="na">xmlns:aop=</span><span class="s">&quot;http://www.springframework.org/schema/aop&quot;</span> <span class="na">xmlns:tx=</span><span class="s">&quot;http://www.springframework.org/schema/tx&quot;</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/beans</span>
+<span class="s">http://www.springframework.org/schema/beans/spring-beans-2.0.xsd</span>
+<span class="s">http://www.springframework.org/schema/util</span>
+<span class="s">http://www.springframework.org/schema/util/spring-util-2.0.xsd</span>
+<span class="s">http://www.springframework.org/schema/jee</span>
+<span class="s">http://www.springframework.org/schema/jee/spring-jee-2.0.xsd </span>
+<span class="s">http://www.springframework.org/schema/lang</span>
+<span class="s">http://www.springframework.org/schema/lang/spring-lang-2.0.xsd </span>
+<span class="s">http://www.springframework.org/schema/aop </span>
+<span class="s">http://www.springframework.org/schema/aop/spring-aop-2.0.xsd </span>
+<span class="s">http://www.springframework.org/schema/tx</span>
+<span class="s">http://www.springframework.org/schema/tx/spring-tx-2.0.xsd&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;djNewsProvider&quot;</span> <span class="na">class=</span><span class="s">&quot;com.bai.spring.FXNewsProvider&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;djNewsListener&quot;</span> <span class="na">ref=</span><span class="s">&quot;djNewsListener&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;djNewsPersister&quot;</span> <span class="na">ref=</span><span class="s">&quot;djNewsPersister&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;djNewsListener&quot;</span> <span class="na">class=</span><span class="s">&quot;com.bai.spring.NewsListener&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;djNewsPersister&quot;</span> <span class="na">class=</span><span class="s">&quot;com.bai.spring.NewsPersister&quot;</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/beans&gt;</span> 
+</code></pre></div>
+<p>生成方法：
+<code>java
+   BeanFactory container=new XmlBeanFactory(new ClassPathResource(&quot;../news-config.xml&quot;)); 
+</code>
+3. 注解方式
+稍后详细介绍</p>
+
+<hr>
+
+<h2 id="xml配置文件详解">XML配置文件详解</h2>
+
+					<div class="meta">
+						<p class="date-publish">
+							Published: 
+							<date class="date-pub" title="2014-09-15T00:00:00+08:00" datetime="2014-09-15T00:00:00+08:00" pubdate>
+							<span class="month"><abbr>September</abbr></span>
+							<span class="day">15</span>
+							<span class="year">2014</span>
+							</date>
+						</p>
+						<ul class="list-category list-linear">
+							<li class="list-head">category: </li>
+							
+							
+
+
+  
+     
+    	<li><a href="/categories.html#spring-ref">
+    		spring <span>1</span>
+    	</a></li>
+    
+  
+
+
+						</ul>
+						<ul class="list-tag list-linear">
+							<li class="list-head">tags: </li>
+							
+							
+
+
+  
+     
+    	<li><a href="/tags.html#java spring-ref">java spring <span>1</span></a></li>
+    
+  
+
+
+
+						</ul>
+					</div><!-- meta -->
+				</div><!-- entry-content -->
+				<div class="misc-content">
+					<div class="social">
+						<ul class="list-linear">
+							<li><div class="twitter-tweet"><a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="username" data-lang="en">Tweet</a></div></li>
+							<li><div class="twitter-follow"><a href="https://twitter.com/username" class="twitter-follow-button" data-show-count="false" data-lang="en"></a></div></li>
+						</ul>
+					</div>
+					
+					
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'unclebai'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+				</div><!-- misc-content -->
+				
+			</div><!-- bd -->
+			<footer class="unit-foot">
+				<div class="unit-inner unit-foot-inner">
+					<nav class="pagination">
+						<ul>
+							
+							<li class="prev"><a class="internal" rel="prev"  href="/java/2014/09/13/maven-" title="View maven 使用汇总">&laquo; maven 使用汇总</a></li>
+							
+							
+							
+						</ul>
+					</nav>
+					<p class="gotop">
+						<a href="#page">Back to Top</a>
+					</p>
+				</div>
+			</footer>
+
+		</div><!-- content -->
+	</div><!-- unit-inner -->
+</article>
+
+
+				</div>
+			</div><!-- unit-inner -->
+		</div><!-- unit-body -->
+	</div><!-- body -->
+	<footer class="the-footer">
+		<div class="unit-foot">
+			<div class="unit-inner unit-foot-inner">
+				<div class="misc vcard">
+					<h4>about</h4>
+					<ul>
+						<li class="contact"><address><span class="author fn n">uncle bai</span> - <span class="fn email">guagualvcha123@gmail.com</span></address></li>
+						<li class="github"><a href="http://github.com/guagualvcha/" rel="me">github.com/guagualvcha</a></li>
+						<li class="rss"><a href="http://feeds.feedburner.com/">Subscribe to RSS Feed</a></li>
+					</ul>
+				</div><!-- misc -->
+				<p class="licence">
+					Powered by <a href="https://github.com/mojombo/jekyll">Jekyll</a> | Fudong Bai.
+				</p>
+			</div><!-- unit-foot-inner -->
+		</div><!-- unit-foot -->
+	</footer>
+</div><!-- page -->
+<script>
+	(function(d, s) {
+		var js, fjs = d.getElementsByTagName(s)[0], load = function(url, id) {
+		if (d.getElementById(id)) {return;}
+		js = d.createElement(s); js.src = url; js.id = id;
+		fjs.parentNode.insertBefore(js, fjs);
+		};
+	load('//platform.twitter.com/widgets.js', 'tweetjs');
+	// load('https://apis.google.com/js/plusone.js', 'gplus1js'); // Checkout http://j.mp/ApDgMr for usage html for this is <div class="g-plusone" data-size="medium"></div>
+	// load('//connect.facebook.net/en_US/all.js#xfbml=1', 'fbjssdk'); // Checkout http://j.mp/wZw2xR for using open graph protorol html for this is <div class="fb-like" data-href="/spring/2014/09/15/spring-ioc" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="verdana"></div>
+	}(document, 'script'));
+</script>
+<script>
+/*! A fix for the iOS orientationchange zoom bug.Script by @scottjehl, rebound by @wilto. MIT License.*/
+(function(j){var i=j.document;if(!i.querySelectorAll){return}var l=i.querySelectorAll("meta[name=viewport]")[0],a=l&&l.getAttribute("content"),h=a+", maximum-scale=1.0",d=a+", maximum-scale=10.0",g=true,c=j.orientation,k=0;if(!l){return}function f(){l.setAttribute("content",d);g=true}function b(){l.setAttribute("content",h);g=false}function e(m){c=Math.abs(j.orientation);k=Math.abs(m.gamma);if(k>8&&c===0){if(g){b()}}else{if(!g){f()}}}j.addEventListener("orientationchange",f,false);j.addEventListener("deviceorientation",e,false)})(this);
+</script>
+
+  
+</body>
+</html>
+

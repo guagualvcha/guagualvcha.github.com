@@ -8,5 +8,6 @@ http://username.github.io/sitemap.txt
 http://username.github.io/tags.html
 http://username.github.io/welcome.html
 
+http://username.github.io/spring/2014/09/15/spring-ioc
 http://username.github.io/java/2014/09/13/maven-
 http://username.github.io/lessons/2011/12/29/jekyll-introduction

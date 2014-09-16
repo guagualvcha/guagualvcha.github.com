@@ -4,13 +4,219 @@
  <title>Uncle Bai's Blog</title>
  <link href="http://username.github.io/" rel="self"/>
  <link href="http://username.github.io"/>
- <updated>2014-09-15T21:15:23+08:00</updated>
+ <updated>2014-09-16T10:07:53+08:00</updated>
  <id>http://username.github.io</id>
  <author>
    <name>uncle bai</name>
    <email>guagualvcha123@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>spring ioc 基础</title>
+   <link href="http://username.github.io/spring/2014/09/15/spring-ioc"/>
+   <updated>2014-09-15T00:00:00+08:00</updated>
+   <id>http://username.github.io/spring/2014/09/15/spring-ioc</id>
+   <content type="html">&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
+
+&lt;div class=&quot;toc&quot;&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&quot;#目录&quot;&gt;目录&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#maven-包配置&quot;&gt;maven 包配置&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#ioc-释意&quot;&gt;IOC 释意&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#ioc-service-provider-作用&quot;&gt;IOC service provider 作用&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#beanfactory&quot;&gt;BeanFactory&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#xml配置文件详解&quot;&gt;XML配置文件详解&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;maven-包配置&quot;&gt;maven 包配置&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;project.build.sourceEncoding&amp;gt;&lt;/span&gt;UTF-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project.build.sourceEncoding&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
+
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
+
+     &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- resources，把配置文件app.xml 放在该目录下，编译完成后，该文件会放在classes的目录下--&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;resources&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;resource&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;directory&amp;gt;&lt;/span&gt;src/main/conf&lt;span class=&quot;nt&quot;&gt;&amp;lt;/directory&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/resource&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/resources&amp;gt;&lt;/span&gt;
+
+
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.apache.maven.plugins&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;maven-compiler-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
+                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;source&amp;gt;&lt;/span&gt;1.7&lt;span class=&quot;nt&quot;&gt;&amp;lt;/source&amp;gt;&lt;/span&gt;
+                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;target&amp;gt;&lt;/span&gt;1.7&lt;span class=&quot;nt&quot;&gt;&amp;lt;/target&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
+
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 测试依赖 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;junit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;junit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;3.8.1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--添加core和context包--&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-core&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;3.0.5.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-context&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;3.0.5.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;ioc-释意&quot;&gt;IOC 释意&lt;/h2&gt;
+
+&lt;p&gt;IOC: Invert Of Control，控制反转，也叫做依赖注入
+遵循好莱坞原则：Don&amp;#39;t call me,I will call you !
+好处：IOC容器统一管理复杂分散的耦合关系，也称IOC service provider。
+&lt;em&gt;IOC方式&lt;/em&gt;
+ - 构造方法注入，获取对象的构造函数列表，注入相应的对象，对象构造完成后马上就能使用。
+ - setter方法注入，为属性暴露setXXX方法，外界调用setXXX方法注入属性对象。
+ - 接口注入(过时)，通过实现的接口对应的特定的方法注入对象。&lt;/p&gt;
+
+&lt;p&gt;比较：构造方法和setter方法注入比较常见，前者在对象构造完成后就进入就绪状态，后者可以支持很多属性分别注入。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;ioc-service-provider-作用&quot;&gt;IOC service provider 作用&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;业务对象的构建管理&lt;/li&gt;
+&lt;li&gt;业务对象间的依赖绑定 &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;前者让业务对象的逻辑免受构建的污染，后者让业务对象实现逻辑时，依赖的对象处于就绪状态。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;beanfactory&quot;&gt;BeanFactory&lt;/h2&gt;
+
+&lt;p&gt;Spring提供了两种容器类型：BeanFactory和ApplicationContext。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;BeanFactory: 基础类型IoC容器,，默认采用延迟初始化策略（lazy-load）&lt;/li&gt;
+&lt;li&gt;ApplicationContext。ApplicationContext在BeanFactory的基础上构建的，是相对比较高级的容器实现，默认全部初始化并绑定完成&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;BeanFactory 对象注册和绑定的方式&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;直接编码&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;DefaultListableBeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanRegistry&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DefaultListableBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;BeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;container&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bindViaCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;beanRegistry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;FXNewsProvider&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;➥&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FXNewsProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;container&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsProvider&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;newsProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAndPersistNews&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanFactory&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bindViaCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanDefinitionRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 
+ &lt;span class=&quot;c1&quot;&gt;//声明bean对象&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;AbstractBeanDefinition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsProvider&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;➥&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RootBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FXNewsProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;AbstractBeanDefinition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsListener&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;➥&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RootBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DowJonesNewsListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;AbstractBeanDefinition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsPersister&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;➥&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RootBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DowJonesNewsPersister&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;c1&quot;&gt;// 将bean定义注册到容器中&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;registerBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsProvider&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;registerBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djListener&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;registerBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djPersister&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsPersister&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;// 指定依赖关系&lt;/span&gt;
+ &lt;span class=&quot;c1&quot;&gt;// 1. 可以通过构造方法注入方式&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;ConstructorArgumentValues&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argValues&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConstructorArgumentValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;argValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addIndexedArgumentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;argValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addIndexedArgumentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newsPersister&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;newsProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setConstructorArgumentValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;c1&quot;&gt;// 2. 或者通过setter方法注入方式&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;MutablePropertyValues&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertyValues&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MutablePropertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;propertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addPropertyValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ropertyValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;newsListener&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newsListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;propertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addPropertyValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;PropertyValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;newPersistener&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newsPersister&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; 
+ &lt;span class=&quot;n&quot;&gt;newsProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setPropertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;propertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; 
+ &lt;span class=&quot;c1&quot;&gt;// 绑定完成&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;编码过程如下：
+DefaultListableBeanFactory 既实现了BeanFactory接口，也实现了BeanDefinitionRegistry接口，因策首先生成一个默认的register，生成bean对象，将bean对象注册到register，即生成ID和类的映射，生成依赖对象：ConstructorArgumentValues，MutablePropertyValues ，把依赖对象注入到bean对象中，再把register作为一个BeanFctory返回，得到一个IOC Service provider。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;外部配置文件方式
+支持property 和xml 配置文件。这里仅展示xml的配置,文档约束从DTD转向XSD，这里采样XSD。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/beans&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:util=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/util&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns:jee=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/jee&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/lang&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xmlns:aop=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/aop&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:tx=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/tx&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/beans&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/beans/spring-beans-2.0.xsd&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/util&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/util/spring-util-2.0.xsd&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/jee&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/jee/spring-jee-2.0.xsd &lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/lang&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/lang/spring-lang-2.0.xsd &lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/aop &lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/aop/spring-aop-2.0.xsd &lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/tx&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;http://www.springframework.org/schema/tx/spring-tx-2.0.xsd&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsProvider&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.bai.spring.FXNewsProvider&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsListener&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsListener&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsPersister&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsPersister&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsListener&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.bai.spring.NewsListener&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;djNewsPersister&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.bai.spring.NewsPersister&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;生成方法：
+&lt;code&gt;java
+   BeanFactory container=new XmlBeanFactory(new ClassPathResource(&amp;quot;../news-config.xml&amp;quot;)); 
+&lt;/code&gt;
+3. 注解方式
+稍后详细介绍&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;xml配置文件详解&quot;&gt;XML配置文件详解&lt;/h2&gt;
+</content>
+ </entry>
  
  <entry>
    <title>maven 使用汇总</title>
