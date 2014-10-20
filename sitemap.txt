@@ -8,6 +8,12 @@ http://username.github.io/sitemap.txt
 http://username.github.io/tags.html
 http://username.github.io/welcome.html
 
+http://username.github.io/rabbitmq/2014/10/20/rabbitmq-workqueue
+http://username.github.io/rabbitmq/2014/10/20/rabbitmq-topic
+http://username.github.io/rabbitmq/2014/10/20/rabbitmq-route
+http://username.github.io/rabbitmq/2014/10/20/rabbitmq-publish_subscribe
+http://username.github.io/rabbitmq/2014/10/20/rabbitmq-connect
+http://username.github.io/rabbitmq/2014/10/20/rabbitmq-base
 http://username.github.io/spring/2014/09/15/spring-ioc
 http://username.github.io/java/2014/09/13/maven-
 http://username.github.io/lessons/2011/12/29/jekyll-introduction
