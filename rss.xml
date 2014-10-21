@@ -5,10 +5,44 @@
         <description>Uncle Bai's Blog - uncle bai</description>
         <link>http://username.github.io</link>
         <link>http://username.github.io</link>
-        <lastBuildDate>2014-10-20T23:12:10+08:00</lastBuildDate>
-        <pubDate>2014-10-20T23:12:10+08:00</pubDate>
+        <lastBuildDate>2014-10-21T19:09:03+08:00</lastBuildDate>
+        <pubDate>2014-10-21T19:09:03+08:00</pubDate>
         <ttl>1800</ttl>
 
+
+        <item>
+                <title>java 异常处理</title>
+                <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;
+&lt;div class=&quot;toc&quot;&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&quot;#我对异常的一点理解&quot;&gt;我对异常的一点理解&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;我对异常的一点理解&quot;&gt;我对异常的一点理解&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;异常的言外之意是出乎意料的情形发送，预定的程序走不通，必须跳转到异常处理处，让程序重新恢复到稳定状态，java的异常机制的优秀之处在于把异常处理和正常程序解耦开。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;异常类的构造函数都有两个，一个是默认的构造函数，一个是带 String 参数的构造函数，其实后者并不太有用，一般根据异常类的类名去判断导致异常的原因。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;用throw关键字抛出一个异常对象，throw的作用类似与return，它会带着异常对象一级一级退出作用域(调用栈，try限定的代码块)，直到被捕捉，或者到达main()方法帧，一旦到达main方法帧，会调用异常的 printStackTrace()方法，然后终止程序；如果异常被捕捉，经过异常处理后，会继续执行异常处理程序之后的代码。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;异常实例 e.printStackTrace()默认将调用序列发送到Syste.error。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;异常申明，一个方法抛出异常或者调用的方法所抛出的异常未被处理，则要在方法外围申明抛出异常的类型，&lt;em&gt;唯一的例外是从RunTimeException继承的异常类，可以不申明&lt;/em&gt;，原因是RunTimeException比较繁杂，如果强制处理会让代码可读性大大降低，java虚拟机会检测运行时异常，自动抛出。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在捕捉异常之后，重新抛出异常，如果不做任何处理，那么异常的抛出点还是最原来的位置，如果调用 &lt;code&gt;throw (Exception)e.fillInStackTrace()&lt;/code&gt;,则调用这个语句的行成为异常新的发生地点。如果捕获一个异常之后要抛出另一个异常实例， 首先实例化一个异常对象，再执行 &lt;code&gt;initCause(e)&lt;/code&gt;,此时抛出的异常的异常链还是从开始的位置开始的。如果是Error，Exception或者RuntimeException的实例可以传e对象进去即可。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;即使return之后，finally的代码仍然会被执行。不要在finally代码块里使用可能导致异常的代码，可能会覆盖捕获的异常，也不要使用return，否则会silence所有的异常。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;一个类的方法即使没有抛出异常，也可以声明异常。 &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;继承类的构造函数的异常声明不受基类的约束，但是其他方法声明的异常必须是基类声明的异常的子类或者同类。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;对于构造阶段不会出异常的情况，可以在finally中释放资源，但是如果构造阶段会出异常，那么最好用try-catch的嵌套结构，而不是在finally中释放资源，因为这个实例可能没有初始化成功。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;可能会遭遇到这种情况：知道一个异常可能会出现，如果捕捉到了，但是我并不知道怎么去处理他，那是捕捉还是不捕捉呢？如果捕捉异常，但是没有做适当的处理，造成了“异常吞食”，如果不捕捉，异常声明会一级级向上传。一个恰当的解决办法就是抛出一个RuntimeException(e)；&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+                <link>http://username.github.io/javase/2014/10/21/exception</link>
+                <guid>http://username.github.io/javase/2014/10/21/exception</guid>
+                <pubDate>2014-10-21T00:00:00+08:00</pubDate>
+        </item>
 
         <item>
                 <title>rabbitmq 工作队列</title>
