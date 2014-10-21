@@ -4,7 +4,7 @@
  <title>Uncle Bai's Blog</title>
  <link href="http://username.github.io/" rel="self"/>
  <link href="http://username.github.io"/>
- <updated>2014-10-21T19:09:03+08:00</updated>
+ <updated>2014-10-21T19:15:49+08:00</updated>
  <id>http://username.github.io</id>
  <author>
    <name>uncle bai</name>
@@ -41,7 +41,6 @@
 &lt;li&gt;&lt;p&gt;继承类的构造函数的异常声明不受基类的约束，但是其他方法声明的异常必须是基类声明的异常的子类或者同类。&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;对于构造阶段不会出异常的情况，可以在finally中释放资源，但是如果构造阶段会出异常，那么最好用try-catch的嵌套结构，而不是在finally中释放资源，因为这个实例可能没有初始化成功。&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;可能会遭遇到这种情况：知道一个异常可能会出现，如果捕捉到了，但是我并不知道怎么去处理他，那是捕捉还是不捕捉呢？如果捕捉异常，但是没有做适当的处理，造成了“异常吞食”，如果不捕捉，异常声明会一级级向上传。一个恰当的解决办法就是抛出一个RuntimeException(e)；&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
  </entry>
