@@ -8,6 +8,7 @@ http://username.github.io/sitemap.txt
 http://username.github.io/tags.html
 http://username.github.io/welcome.html
 
+http://username.github.io/javase/2014/10/22/string-
 http://username.github.io/javase/2014/10/21/exception
 http://username.github.io/rabbitmq/2014/10/20/rabbitmq-workqueue
 http://username.github.io/rabbitmq/2014/10/20/rabbitmq-topic

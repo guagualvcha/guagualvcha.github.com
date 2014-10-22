@@ -5,10 +5,78 @@
         <description>Uncle Bai's Blog - uncle bai</description>
         <link>http://username.github.io</link>
         <link>http://username.github.io</link>
-        <lastBuildDate>2014-10-21T19:15:49+08:00</lastBuildDate>
-        <pubDate>2014-10-21T19:15:49+08:00</pubDate>
+        <lastBuildDate>2014-10-22T12:03:06+08:00</lastBuildDate>
+        <pubDate>2014-10-22T12:03:06+08:00</pubDate>
         <ttl>1800</ttl>
 
+
+        <item>
+                <title>java String</title>
+                <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;
+&lt;div class=&quot;toc&quot;&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&quot;#我对string的一点理解&quot;&gt;我对String的一点理解&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href=&quot;#string-是不可变类&quot;&gt;String 是不可变类&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#一些陷阱&quot;&gt;一些陷阱&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#格式化输出&quot;&gt;格式化输出&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href=&quot;#正则表达式的基础备忘&quot;&gt;正则表达式的基础备忘&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;我对string的一点理解&quot;&gt;我对String的一点理解&lt;/h2&gt;
+
+&lt;h3 id=&quot;string-是不可变类&quot;&gt;String 是不可变类&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;string这个类非常特殊，&lt;code&gt;String string=&amp;quot;abc&amp;quot;&lt;/code&gt;，那么这个字符串内存是分配在常量池内的，但是如果 &lt;code&gt;String string=new String(&amp;quot;abc&amp;quot;)&lt;/code&gt;,这个字符串对象是在堆上分配的。&lt;/li&gt;
+&lt;li&gt;String类实现了java中唯二的操作符重载 &lt;em&gt;+&lt;/em&gt; 与 &lt;em&gt;+=&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;string类提供的任何改变这个string对象的方法都会生成一个新的对象，如果没有任何改变仍然返回原来的对象以节省空间。&lt;/li&gt;
+&lt;li&gt;string类中改变字符串的操作都会new 出一个StringBuilder对象去构造，因此如果循环得改变这个字符串的话，最好代码里显式地去构造&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h3 id=&quot;一些陷阱&quot;&gt;一些陷阱&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在重写类的 toString 对象时，不要显式或隐式的调用this.toString()方法，会造成递归。&lt;/li&gt;
+&lt;li&gt;多线程中使用线程安全的类StringBuffer&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h3 id=&quot;格式化输出&quot;&gt;格式化输出&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;System.out.format(&amp;quot;%d %s&amp;quot;,1,&amp;quot;avc&amp;quot;);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Formatter f=new Formatter(System.out);f.format(&amp;quot;%d %s&amp;quot;,1,&amp;quot;avc&amp;quot;);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;格式化说明符： %[flag][width][.precision]conversion，flag默认为右对齐，加 - 可以左对齐，width指定最小长度，precision功能不太一致，在string中表示最大长度，在fload中表示小数点位数，在整数中不能使用，convert常用的如整数型d，浮点型f，字符串型s，科学计数型e。&lt;/li&gt;
+&lt;li&gt;String.format(&amp;quot;%d %s&amp;quot;,1,&amp;quot;avc&amp;quot;)与Formatter用法一样，返回String类型，更加方便。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h3 id=&quot;正则表达式的基础备忘&quot;&gt;正则表达式的基础备忘&lt;/h3&gt;
+
+&lt;p&gt;string对象支持的matches(),split(),repalce()都支持正则表达式。&lt;/p&gt;
+</description>
+                <link>http://username.github.io/javase/2014/10/22/string-</link>
+                <guid>http://username.github.io/javase/2014/10/22/string-</guid>
+                <pubDate>2014-10-22T00:00:00+08:00</pubDate>
+        </item>
 
         <item>
                 <title>java 异常处理</title>
